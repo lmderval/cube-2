@@ -61,7 +61,7 @@ public abstract class Block {
 
 	public int getYonScreen() {
 
-		return this.game.getWindow().getGlassPaneHeigth() - this.y * this.game.getWindow().getUnit() - this.game.getWindow().getUnit();
+		return this.game.getWindow().getGlassPaneHeigth() - this.y * this.game.getWindow().getUnit() - this.game.getWindow().getUnit() * this.height;
 	}
 
 	public boolean isStatic() {
@@ -80,6 +80,19 @@ public abstract class Block {
 		Rectangle left = new Rectangle(this.x + this.width - 1, this.y, 1, this.height);
 
 		res = (byte) ((e.intersects(up) ? UP : 0) + (e.intersects(down) ? DOWN : 0) + (e.intersects(right) ? RIGHT : 0) + (e.intersects(left) ? LEFT : 0));
+
+		return res;
+	}
+
+	public byte collideX(Entity entity) {
+
+		byte res = 0;
+
+		Rectangle e = new Rectangle(entity.getX(), entity.getY(), entity.getWidth(), entity.getHeight());
+		Rectangle right = new Rectangle(this.x - 1, this.y, 1, this.height);
+		Rectangle left = new Rectangle(this.x + this.width, this.y, 1, this.height);
+
+		res = (byte) ((e.intersects(right) ? RIGHT : 0) + (e.intersects(left) ? LEFT : 0));
 
 		return res;
 	}

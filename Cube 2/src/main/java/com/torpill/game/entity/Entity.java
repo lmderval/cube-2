@@ -30,6 +30,7 @@ public abstract class Entity {
 	public void update() {
 
 		ArrayList<Block> blocks = this.game.getBlocks();
+		boolean flag = true;
 		int i1;
 		byte b1;
 		byte col;
@@ -54,6 +55,11 @@ public abstract class Entity {
 						break;
 					}
 				}
+
+				if (block.collideX(this) != 0) {
+
+					flag = false;
+				}
 			}
 		}
 
@@ -69,7 +75,7 @@ public abstract class Entity {
 
 					colsides[b1] = (col & (byte) (Math.pow(2, b1))) == (byte) (Math.pow(2, b1));
 
-					if (colsides[b1]) {
+					if (colsides[b1] && flag) {
 
 						this.y -= this.motionY / Math.abs(this.motionY);
 						this.motionY = 0;
@@ -80,14 +86,14 @@ public abstract class Entity {
 			}
 		}
 
-		if (this.y < this.height - 1) {
+		if (this.y < 0) {
 
-			this.y = this.height - 1;
+			this.y = 0;
 			this.motionY = 0;
 
 			this.onGround = true;
 
-		} else if (this.colsides[0]) {
+		} else if (this.colsides[0] && flag) {
 
 			this.motionY = 0;
 
@@ -136,7 +142,7 @@ public abstract class Entity {
 
 	public int getYonScreen() {
 
-		return this.game.getWindow().getGlassPaneHeigth() - this.y * this.game.getWindow().getUnit() - this.game.getWindow().getUnit();
+		return this.game.getWindow().getGlassPaneHeigth() - this.y * this.game.getWindow().getUnit() - this.game.getWindow().getUnit() * this.height;
 	}
 
 	public Color getColor() {

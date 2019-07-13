@@ -14,6 +14,6 @@ public class Level0 extends Level {
 
 		super.init();
 
-		Block.create(StoneBlock.class, 20, 7, 20, 3).addTo(this);
+		Block.create(StoneBlock.class, 20, 6, 20, 3).addTo(this);
 	}
 }
