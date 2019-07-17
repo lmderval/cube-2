@@ -31,6 +31,7 @@ public abstract class Entity {
 
 		ArrayList<Block> blocks = this.game.getBlocks();
 		boolean flag = true;
+		boolean flag1 = false;
 		int i1;
 		byte b1;
 		byte col;
@@ -79,9 +80,15 @@ public abstract class Entity {
 
 						this.y -= this.motionY / Math.abs(this.motionY);
 						this.motionY = 0;
+						flag1 = true;
 
 						break;
 					}
+				}
+				
+				if (flag1) {
+					
+					break;
 				}
 			}
 		}
