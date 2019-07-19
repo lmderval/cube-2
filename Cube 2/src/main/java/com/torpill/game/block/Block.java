@@ -96,6 +96,18 @@ public abstract class Block {
 
 		return res;
 	}
+	
+	public byte collideY(Entity entity) {
+
+		byte res = 0;
+
+		Rectangle e = new Rectangle(entity.getX(), entity.getY(), entity.getWidth(), entity.getHeight());
+		Rectangle down = new Rectangle(this.x, this.y - 1, this.width, 1);
+
+		res = e.intersects(down) ? DOWN : 0;
+
+		return res;
+	}
 
 	public Color getColor() {
 

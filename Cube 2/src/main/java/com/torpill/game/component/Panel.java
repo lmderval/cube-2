@@ -71,8 +71,6 @@ public class Panel extends JPanel {
 
 			Rectangle e = new Rectangle(p.getX() * unit, p.getY() * unit, p.getWidth() * unit, p.getHeight() * unit);
 			Graphics2D g2d = (Graphics2D) g;
-			g.setColor(Color.BLACK);
-			g2d.fill(e);
 
 			ArrayList<Block> bs = this.game.getBlocks();
 			Rectangle up, down, right, left;
@@ -92,6 +90,9 @@ public class Panel extends JPanel {
 				g2d.fill(right);
 				g2d.fill(left);
 			}
+			
+			g.setColor(Color.BLACK);
+			g2d.fill(e);
 		}
 	}
 

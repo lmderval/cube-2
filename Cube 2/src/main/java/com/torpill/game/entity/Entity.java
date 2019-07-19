@@ -85,9 +85,19 @@ public abstract class Entity {
 						break;
 					}
 				}
-				
+
+				if (block.collideY(this) != 0) {
+
+					flag = false;
+
+//					this.y -= this.motionY / Math.abs(this.motionY);
+					this.motionY = 0;
+
+					break;
+				}
+
 				if (flag1) {
-					
+
 					break;
 				}
 			}
