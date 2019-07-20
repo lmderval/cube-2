@@ -8,6 +8,7 @@ import com.torpill.game.entity.Entity;
 import com.torpill.game.entity.Player;
 import com.torpill.game.level.Level;
 import com.torpill.game.level.Level0;
+import com.torpill.game.util.TextureManager;
 
 public class Game implements Runnable {
 
@@ -22,6 +23,7 @@ public class Game implements Runnable {
 	@Override
 	public void run() {
 
+		TextureManager.init();
 		this.alive = true;
 		Level level = new Level0();
 		level.init();
@@ -57,6 +59,8 @@ public class Game implements Runnable {
 
 			block.update();
 		}
+
+		this.window.setOffset(this.player.generateXOffset(), 0);
 
 		this.tick++;
 	}

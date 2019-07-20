@@ -16,10 +16,10 @@ public class RichPresence {
 		lib.Discord_Initialize(applicationId, handlers, true, steamId);
 		presence = new DiscordRichPresence();
 		presence.startTimestamp = System.currentTimeMillis() / 1000;
-		presence.details = "Testing RPC";
+		presence.details = "Playing";
 		presence.largeImageKey = "cube";
 		lib.Discord_UpdatePresence(presence);
-		// in a worker thread
+		
 		new Thread(() -> {
 
 			while (!Thread.currentThread().isInterrupted()) {

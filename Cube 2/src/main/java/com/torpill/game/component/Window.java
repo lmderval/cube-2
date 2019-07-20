@@ -107,6 +107,11 @@ public class Window extends JFrame implements Runnable, ComponentListener {
 		return this.height;
 	}
 
+	public void setOffset(int x, int y) {
+
+		this.pan.setOffset(x, y);
+	}
+
 	private Toolkit tk;
 	private Panel pan;
 	private int width, height;

@@ -3,6 +3,7 @@ package com.torpill.game.component;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
@@ -27,6 +28,9 @@ public class Panel extends JPanel {
 	public void paintComponent(Graphics g) {
 
 		super.paintComponent(g);
+		Graphics2D g2d = (Graphics2D) g;
+
+		g2d.translate(-this.xoffset, -this.yoffset);
 
 		int x, y, width, height, unit = this.window.getUnit();
 
@@ -37,9 +41,17 @@ public class Panel extends JPanel {
 			y = entity.getYonScreen();
 			width = entity.getWidth();
 			height = entity.getHeight();
+			Image img = entity.getImage();
 
-			g.setColor(entity.getColor());
-			g.fillRect(x, y, unit * width, unit * height);
+			if (img != null) {
+
+				g.drawImage(img, x, y, unit * width, unit * height, this);
+
+			} else {
+
+				g.setColor(entity.getColor());
+				g.fillRect(x, y, unit * width, unit * height);
+			}
 		}
 
 		ArrayList<Block> blocks = this.game.getBlocks();
@@ -54,11 +66,8 @@ public class Panel extends JPanel {
 			g.fillRect(x, y, unit * width, unit * height);
 		}
 
-		g.setColor(Color.BLUE);
-		g.drawString(this.window.getFPS() + " FPS", 10, 20);
-
 		// DEBUG
-		boolean debug = true;
+		boolean debug = false;
 		if (debug) {
 
 			g.setColor(Color.RED);
@@ -70,7 +79,6 @@ public class Panel extends JPanel {
 			if (p.colsides[3]) g.fillRect(baseX + unit * 4, unit * 2, unit * 2, unit * 2);
 
 			Rectangle e = new Rectangle(p.getX() * unit, p.getY() * unit, p.getWidth() * unit, p.getHeight() * unit);
-			Graphics2D g2d = (Graphics2D) g;
 
 			ArrayList<Block> bs = this.game.getBlocks();
 			Rectangle up, down, right, left;
@@ -90,12 +98,24 @@ public class Panel extends JPanel {
 				g2d.fill(right);
 				g2d.fill(left);
 			}
-			
+
 			g.setColor(Color.BLACK);
 			g2d.fill(e);
 		}
+
+		g2d.translate(this.xoffset, this.yoffset);
+
+		g.setColor(Color.BLUE);
+		g.drawString(this.window.getFPS() + " FPS", 10, 20);
+	}
+
+	public void setOffset(int x, int y) {
+
+		this.xoffset = x * this.window.getUnit();
+		this.yoffset = y * this.window.getUnit();
 	}
 
 	private Game game;
 	private Window window;
+	private int xoffset = 0, yoffset = 0;
 }

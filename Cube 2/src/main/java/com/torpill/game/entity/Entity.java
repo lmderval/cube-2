@@ -1,6 +1,7 @@
 package com.torpill.game.entity;
 
 import java.awt.Color;
+import java.awt.Image;
 import java.util.ArrayList;
 
 import com.torpill.game.Game;
@@ -166,6 +167,8 @@ public abstract class Entity {
 
 		return Color.BLACK;
 	}
+	
+	public abstract Image getImage();
 
 	protected Game game;
 	protected Level level;
