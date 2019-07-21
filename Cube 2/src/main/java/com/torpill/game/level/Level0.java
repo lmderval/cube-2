@@ -17,5 +17,6 @@ public class Level0 extends Level {
 		Block.create(StoneBlock.class, 20, 6, 20, 3).addTo(this);
 		Block.create(StoneBlock.class, 60, 12, 11, 3).addTo(this);
 		Block.create(StoneBlock.class, 64, 0, 3, 12).addTo(this);
+		Block.createDecoration(StoneBlock.class, 64, 11, 3, 2).addTo(this);
 	}
 }

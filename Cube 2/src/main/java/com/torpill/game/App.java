@@ -13,7 +13,7 @@ public class App {
 
 		Thread thr = new Thread(DEFAULT_GAME);
 		thr.start();
-		
+
 		RichPresence.init();
 	}
 

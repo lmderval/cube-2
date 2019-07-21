@@ -61,9 +61,17 @@ public class Panel extends JPanel {
 			y = block.getYonScreen();
 			width = block.getWidth();
 			height = block.getHeight();
+			Image img = block.getImage();
 
-			g.setColor(block.getColor());
-			g.fillRect(x, y, unit * width, unit * height);
+			if (img != null) {
+
+				g.drawImage(img, x, y, unit * width, unit * height, this);
+
+			} else {
+
+				g.setColor(block.getColor());
+				g.fillRect(x, y, unit * width, unit * height);
+			}
 		}
 
 		// DEBUG

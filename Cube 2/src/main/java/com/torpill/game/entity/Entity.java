@@ -42,6 +42,11 @@ public abstract class Entity {
 			this.x += this.motionX / Math.abs(this.motionX);
 
 			for (Block block : blocks) {
+				
+				if (block.isDecoration()) {
+					
+					continue;
+				}
 
 				col = block.collide(this);
 
@@ -70,6 +75,11 @@ public abstract class Entity {
 			this.y += this.motionY / Math.abs(this.motionY);
 
 			for (Block block : blocks) {
+				
+				if (block.isDecoration()) {
+					
+					continue;
+				}
 
 				col = block.collide(this);
 
