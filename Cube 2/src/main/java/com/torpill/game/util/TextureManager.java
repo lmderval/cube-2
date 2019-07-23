@@ -14,6 +14,8 @@ public class TextureManager {
 		CUBE = get("/textures/entity/player/cube.png");
 		STONE = get("/textures/blocks/stone.png");
 		DSTONE = get("/textures/blocks/decorations/stone.png");
+		LAVA = get("/textures/blocks/lava.png");
+		DLAVA = get("/textures/blocks/decorations/lava.png");
 	}
 
 	private static Image get(String file) {
@@ -43,4 +45,6 @@ public class TextureManager {
 	public static Image CUBE;
 	public static Image STONE;
 	public static Image DSTONE;
+	public static Image LAVA;
+	public static Image DLAVA;
 }

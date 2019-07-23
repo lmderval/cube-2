@@ -30,12 +30,20 @@ public class Panel extends JPanel {
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
 
+		g.setColor(Color.BLUE);
+		g.drawString(this.window.getFPS() + " FPS", 10, 20);
+
 		g2d.translate(-this.xoffset, -this.yoffset);
 
 		int x, y, width, height, unit = this.window.getUnit();
 
 		ArrayList<Entity> entities = this.game.getEntities();
 		for (Entity entity : entities) {
+
+			if (entity.isDisappear()) {
+
+				continue;
+			}
 
 			x = entity.getXonScreen();
 			y = entity.getYonScreen();
@@ -112,9 +120,6 @@ public class Panel extends JPanel {
 		}
 
 		g2d.translate(this.xoffset, this.yoffset);
-
-		g.setColor(Color.BLUE);
-		g.drawString(this.window.getFPS() + " FPS", 10, 20);
 	}
 
 	public void setOffset(int x, int y) {

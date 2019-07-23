@@ -1,6 +1,7 @@
 package com.torpill.game;
 
 import com.torpill.game.discord.RichPresence;
+import com.torpill.game.util.TextureManager;
 
 public class App {
 
@@ -11,10 +12,11 @@ public class App {
 
 	public static void main(String[] args) {
 
+		RichPresence.init();
+		TextureManager.init();
+
 		Thread thr = new Thread(DEFAULT_GAME);
 		thr.start();
-
-		RichPresence.init();
 	}
 
 	public final static Game DEFAULT_GAME;

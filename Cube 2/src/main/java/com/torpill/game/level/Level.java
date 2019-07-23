@@ -4,8 +4,12 @@ import java.util.ArrayList;
 
 import com.torpill.game.Game;
 import com.torpill.game.block.Block;
+import com.torpill.game.discord.RichPresence;
 import com.torpill.game.entity.Entity;
 import com.torpill.game.entity.Player;
+
+import club.minnced.discord.rpc.DiscordRPC;
+import club.minnced.discord.rpc.DiscordRichPresence;
 
 public abstract class Level {
 
@@ -26,6 +30,14 @@ public abstract class Level {
 	public void load(Game game) {
 
 		game.load(this.player, this.entities, this.blocks);
+
+		DiscordRPC lib = DiscordRPC.INSTANCE;
+		DiscordRichPresence presence = new DiscordRichPresence();
+		presence.startTimestamp = RichPresence.startTimestamp;
+		presence.details = "En jeu";
+		presence.state = this.getName();
+		presence.largeImageKey = "cube";
+		lib.Discord_UpdatePresence(presence);
 	}
 
 	public void register(Entity entity) {
@@ -37,6 +49,8 @@ public abstract class Level {
 
 		this.blocks.add(block);
 	}
+
+	public abstract String getName();
 
 	private Player player;
 	private int x, y;

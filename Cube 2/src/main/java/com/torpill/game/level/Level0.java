@@ -2,6 +2,7 @@ package com.torpill.game.level;
 
 import com.torpill.game.block.Block;
 import com.torpill.game.block.StoneBlock;
+import com.torpill.game.block.damager.LavaBlock;
 
 public class Level0 extends Level {
 
@@ -14,9 +15,13 @@ public class Level0 extends Level {
 
 		super.init();
 
-		Block.create(StoneBlock.class, 20, 6, 20, 3).addTo(this);
-		Block.create(StoneBlock.class, 60, 12, 11, 3).addTo(this);
-		Block.create(StoneBlock.class, 64, 0, 3, 12).addTo(this);
-		Block.createDecoration(StoneBlock.class, 64, 11, 3, 2).addTo(this);
+		Block.create(StoneBlock.class, 0, 10, 60, 3).addTo(this);
+		Block.create(StoneBlock.class, 70, 10, 20, 3).addTo(this);
+		Block.create(LavaBlock.class, 0, 0, 500, 6).addTo(this);
+	}
+
+	public String getName() {
+
+		return "Didacticiel";
 	}
 }

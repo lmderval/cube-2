@@ -3,7 +3,9 @@ package com.torpill.game.component;
 import java.awt.Toolkit;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 import com.torpill.game.Game;
@@ -24,6 +26,14 @@ public class Window extends JFrame implements Runnable, ComponentListener {
 
 		this.setTitle("Game");
 		this.setSize(this.width, this.height);
+		try {
+
+			this.setIconImage(ImageIO.read(Window.class.getResource("/textures/icons/icon.png")));
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		this.addKeyListener(new KeyboardManager());

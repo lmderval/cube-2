@@ -14,9 +14,9 @@ public class RichPresence {
 		DiscordEventHandlers handlers = new DiscordEventHandlers();
 		handlers.ready = (user) -> System.out.println("Ready!");
 		lib.Discord_Initialize(applicationId, handlers, true, steamId);
-		presence = new DiscordRichPresence();
-		presence.startTimestamp = System.currentTimeMillis() / 1000;
-		presence.details = "Playing";
+		DiscordRichPresence presence = new DiscordRichPresence();
+		presence.startTimestamp = startTimestamp;
+		presence.details = "Sur le menu";
 		presence.largeImageKey = "cube";
 		lib.Discord_UpdatePresence(presence);
 		
@@ -33,6 +33,6 @@ public class RichPresence {
 			}
 		}, "RPC-Callback-Handler").start();
 	}
-
-	private static DiscordRichPresence presence;
+	
+	public static final long startTimestamp = System.currentTimeMillis() / 1000;
 }

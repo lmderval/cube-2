@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import com.torpill.game.Game;
 import com.torpill.game.block.Block;
+import com.torpill.game.block.damager.DamagerBlock;
 import com.torpill.game.level.Level;
 
 public abstract class Entity {
@@ -30,6 +31,11 @@ public abstract class Entity {
 
 	public void update() {
 
+		if (this.dead && this.deathtick == 0) {
+
+			return;
+		}
+
 		ArrayList<Block> blocks = this.game.getBlocks();
 		boolean flag = true;
 		boolean flag1 = false;
@@ -42,19 +48,24 @@ public abstract class Entity {
 			this.x += this.motionX / Math.abs(this.motionX);
 
 			for (Block block : blocks) {
-				
-				if (block.isDecoration()) {
-					
-					continue;
-				}
 
 				col = block.collide(this);
+
+				if (block instanceof DamagerBlock && col != 0) {
+
+					this.dead = true;
+				}
+
+				if (block.isDecoration() || block.isFluid()) {
+
+					continue;
+				}
 
 				for (b1 = 0; b1 < colsides.length; b1++) {
 
 					colsides[b1] = (col & (byte) (Math.pow(2, b1))) == (byte) (Math.pow(2, b1));
 
-					if (colsides[b1]) {
+					if (colsides[b1] || this.x < 0) {
 
 						this.x -= this.motionX / Math.abs(this.motionX);
 						this.motionX = 0;
@@ -75,13 +86,18 @@ public abstract class Entity {
 			this.y += this.motionY / Math.abs(this.motionY);
 
 			for (Block block : blocks) {
-				
-				if (block.isDecoration()) {
-					
-					continue;
-				}
 
 				col = block.collide(this);
+
+				if (block instanceof DamagerBlock && col != 0) {
+
+					this.dead = true;
+				}
+
+				if (block.isDecoration() || block.isFluid()) {
+
+					continue;
+				}
 
 				for (b1 = 0; b1 < colsides.length; b1++) {
 
@@ -101,7 +117,7 @@ public abstract class Entity {
 
 					flag = false;
 
-//					this.y -= this.motionY / Math.abs(this.motionY);
+// this.y -= this.motionY / Math.abs(this.motionY);
 					this.motionY = 0;
 
 					break;
@@ -130,6 +146,11 @@ public abstract class Entity {
 		} else {
 
 			this.onGround = false;
+		}
+
+		if (this.dead) {
+
+			this.deathtick--;
 		}
 
 		this.applyGravity();
@@ -177,7 +198,23 @@ public abstract class Entity {
 
 		return Color.BLACK;
 	}
-	
+
+	public void setAlive() {
+
+		this.dead = false;
+		this.deathtick = 5;
+	}
+
+	public boolean isAlive() {
+
+		return !this.dead;
+	}
+
+	public boolean isDisappear() {
+
+		return this.dead && this.deathtick == 0;
+	}
+
 	public abstract Image getImage();
 
 	protected Game game;
@@ -186,4 +223,6 @@ public abstract class Entity {
 	protected int motionX, motionY;
 	protected boolean onGround = true;
 	public boolean colsides[] = new boolean[4];
+	protected boolean dead;
+	private int deathtick = 5;
 }

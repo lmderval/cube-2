@@ -225,6 +225,11 @@ public abstract class Block {
 
 		return this.decorative;
 	}
+	
+	public boolean isFluid() {
+
+		return this.fluid;
+	}
 
 	public static Block create(Class<? extends Block> clazz, Object... args) {
 
@@ -271,4 +276,5 @@ public abstract class Block {
 	protected int x, y, width = 1, height = 1;
 	public static final byte UP = 1, DOWN = 2, RIGHT = 4, LEFT = 8;
 	protected boolean decorative = false;
+	protected boolean fluid = false;
 }

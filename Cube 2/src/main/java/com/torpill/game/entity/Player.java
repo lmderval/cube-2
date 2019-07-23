@@ -19,8 +19,8 @@ public class Player extends Entity {
 
 	public void update() {
 
-		this.motionX = (int) (((KeyboardManager.get(KeyEvent.VK_D) * (1 + KeyboardManager.get(KeyEvent.VK_A))) - (KeyboardManager.get(KeyEvent.VK_Q) * (1 + KeyboardManager.get(KeyEvent.VK_A)))) * (this.onGround ? 1 : 2));
-		this.motionY += (!this.onGround ? 0 : KeyboardManager.consume(KeyEvent.VK_SPACE) * 4);
+		this.motionX = (this.dead ? 0 : ((KeyboardManager.get(KeyEvent.VK_D) * (1 + KeyboardManager.get(KeyEvent.VK_A))) - (KeyboardManager.get(KeyEvent.VK_Q) * (1 + KeyboardManager.get(KeyEvent.VK_A)))) * (this.onGround ? 1 : 2));
+		this.motionY += (!this.onGround || this.dead ? 0 : KeyboardManager.consume(KeyEvent.VK_SPACE) * 4);
 
 		super.update();
 	}
@@ -29,9 +29,9 @@ public class Player extends Entity {
 
 		return Color.RED;
 	}
-	
+
 	public Image getImage() {
-		
+
 		return TextureManager.CUBE;
 	}
 
