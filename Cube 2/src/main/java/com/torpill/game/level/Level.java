@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.torpill.game.Game;
 import com.torpill.game.block.Block;
+import com.torpill.game.block.Blocks;
 import com.torpill.game.discord.RichPresence;
 import com.torpill.game.entity.Entity;
 import com.torpill.game.entity.Player;
@@ -13,12 +14,36 @@ import club.minnced.discord.rpc.DiscordRichPresence;
 
 public abstract class Level {
 
-	public Level(int x, int y) {
+	protected Level(int x, int y) {
 
 		this.x = x;
 		this.y = y;
 		this.entities = new ArrayList<Entity>();
-		this.blocks = new ArrayList<Block>();
+		this.data = new Block[this.WIDTH = 500][this.HEIGHT = 100];
+
+		for (int i = 0; i < this.WIDTH; i++) {
+
+			for (int j = 0; j < this.HEIGHT; j++) {
+
+				this.data[i][j] = Blocks.air;
+			}
+		}
+	}
+
+	public void reinit() {
+
+		this.entities = new ArrayList<Entity>();
+		this.data = new Block[this.WIDTH][this.HEIGHT];
+
+		for (int i = 0; i < this.WIDTH; i++) {
+
+			for (int j = 0; j < this.HEIGHT; j++) {
+
+				this.data[i][j] = Blocks.air;
+			}
+		}
+
+		this.init();
 	}
 
 	public void init() {
@@ -29,7 +54,7 @@ public abstract class Level {
 
 	public void load(Game game) {
 
-		game.load(this.player, this.entities, this.blocks);
+		game.load(this.player, this.entities, this.data);
 
 		DiscordRPC lib = DiscordRPC.INSTANCE;
 		DiscordRichPresence presence = new DiscordRichPresence();
@@ -40,14 +65,37 @@ public abstract class Level {
 		lib.Discord_UpdatePresence(presence);
 	}
 
-	public void register(Entity entity) {
+	public void add(Entity entity) {
 
 		this.entities.add(entity);
 	}
 
-	public void register(Block block) {
+	public void add(Block block, int x, int y, int width, int height, boolean decoration) {
 
-		this.blocks.add(block);
+		for (int bx = x; bx < x + width; bx++) {
+
+			if (x > this.WIDTH) {
+
+				continue;
+			}
+
+			for (int by = y; by < y + height; by++) {
+
+				if (y > this.HEIGHT) {
+
+					continue;
+				}
+
+				if (decoration) {
+
+					this.data[bx][by] = block.decoration;
+
+				} else {
+
+					this.data[bx][by] = block;
+				}
+			}
+		}
 	}
 
 	public abstract String getName();
@@ -55,5 +103,6 @@ public abstract class Level {
 	private Player player;
 	private int x, y;
 	private ArrayList<Entity> entities;
-	private ArrayList<Block> blocks;
+	private final int WIDTH, HEIGHT;
+	private Block data[][];
 }

@@ -61,7 +61,7 @@ public class Window extends JFrame implements Runnable, ComponentListener {
 			while (now + 1000000000 > System.nanoTime()) {
 
 				long nano = System.nanoTime();
-				long delay = 1000000000 / this.fps; // 1000000000 nanos = 1 second
+				long delay = 1000000000 / this.fps;
 
 				while (nano + delay > System.nanoTime());
 

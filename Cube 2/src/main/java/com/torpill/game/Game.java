@@ -1,21 +1,33 @@
 package com.torpill.game;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 import com.torpill.game.block.Block;
+import com.torpill.game.block.Blocks;
 import com.torpill.game.component.Window;
 import com.torpill.game.entity.Entity;
 import com.torpill.game.entity.Player;
 import com.torpill.game.level.Level;
-import com.torpill.game.level.Level0;
+import com.torpill.game.level.Levels;
 
 public class Game implements Runnable {
 
+	static {
+
+		bid = 0;
+		lid = 0;
+		DECORATION = 1024;
+		blocksid = new LinkedHashMap<Integer, Block>();
+		levelsid = new LinkedHashMap<Integer, Level>();
+	}
+
 	public Game() {
+
+		this.state = GameState.INIT;
 
 		this.tps = 20;
 		this.entities = new ArrayList<Entity>();
-		this.blocks = new ArrayList<Block>();
 		this.window = new Window(this);
 	}
 
@@ -23,9 +35,6 @@ public class Game implements Runnable {
 	public void run() {
 
 		this.alive = true;
-		Level level = new Level0();
-		level.init();
-		level.load(this);
 
 		Thread thr = new Thread(this.window);
 		thr.start();
@@ -33,7 +42,7 @@ public class Game implements Runnable {
 		while (this.alive) {
 
 			long nano = System.nanoTime();
-			long delay = 1000000000 / this.tps; // 1000000000 nanos = 1 second
+			long delay = 1000000000 / this.tps;
 
 			while (nano + delay > System.nanoTime());
 
@@ -48,19 +57,52 @@ public class Game implements Runnable {
 
 	private void tick() {
 
-		for (Entity entity : this.entities) {
+		switch (this.state) {
+		case INIT:
+			
+			Blocks.init();
+			Blocks.register();
 
-			entity.update();
+			Levels.init();
+			Levels.register();
+			
+			this.state = GameState.LEVELS;
+			
+			break;
+			
+		case LEVELS:
+			
+			this.level = Levels.level0;
+			this.level.load(this);
+			
+			this.state = GameState.PLAY;
+			
+			break;
+			
+		case PLAY:
+			if (this.player.isAlive()) {
+
+				for (Entity entity : this.entities) {
+
+					entity.update();
+				}
+
+				this.window.setOffset(this.player.generateXOffset(), 0);
+
+				this.tick++;
+
+			} else {
+
+				this.state = GameState.DEATH;
+			}
+			break;
+			
+		case DEATH:
+			
+			this.reload();
+			
+			break;
 		}
-
-		for (Block block : this.blocks) {
-
-			block.update();
-		}
-
-		this.window.setOffset(this.player.generateXOffset(), 0);
-
-		this.tick++;
 	}
 
 	public long getTick() {
@@ -83,14 +125,9 @@ public class Game implements Runnable {
 		this.tick = 0;
 	}
 
-	public void register(Entity entity) {
+	public void add(Entity entity) {
 
 		this.entities.add(entity);
-	}
-
-	public void register(Block block) {
-
-		this.blocks.add(block);
 	}
 
 	public ArrayList<Entity> getEntities() {
@@ -98,17 +135,16 @@ public class Game implements Runnable {
 		return this.entities;
 	}
 
-	public ArrayList<Block> getBlocks() {
+	public Block[][] getData() {
 
-		return this.blocks;
+		return this.data;
 	}
 
-	public void load(Player player, ArrayList<Entity> entities, ArrayList<Block> blocks) {
+	public void load(Player player, ArrayList<Entity> entities, Block data[][]) {
 
 		player.setAlive();
-		
+
 		this.entities.clear();
-		this.blocks.clear();
 
 		this.player = player;
 
@@ -117,10 +153,7 @@ public class Game implements Runnable {
 			entity.addTo(this);
 		}
 
-		for (Block block : blocks) {
-
-			block.addTo(this);
-		}
+		this.data = data;
 
 		this.restart();
 	}
@@ -130,11 +163,62 @@ public class Game implements Runnable {
 		return this.player;
 	}
 
+	public static void registerBlock(Block block) {
+
+		if (bid < DECORATION) {
+
+			if (block != Blocks.air) {
+
+				block.loadTexture();
+
+			}
+
+			block.setId(bid);
+			block.loadDecoration();
+
+			blocksid.put(bid, block);
+			blocksid.put(bid + DECORATION, block.decoration);
+
+			bid++;
+		}
+	}
+
+	public static Block getBlockFromId(int id) {
+
+		return blocksid.get(id);
+	}
+
+	public static void registerLevel(Level level) {
+
+		levelsid.put(lid++, level);
+	}
+
+	public void reload() {
+
+		this.entities.clear();
+
+		this.level.reinit();
+		this.level.load(this);
+		
+		this.state = GameState.PLAY;
+	}
+
+	public static enum GameState {
+
+		INIT, LEVELS, PLAY, DEATH
+	}
+
 	private Window window;
 	private boolean alive;
 	private long tick;
 	private final long tps;
 	private Player player;
 	private ArrayList<Entity> entities;
-	private ArrayList<Block> blocks;
+	private Block data[][];
+	private Level level;
+	private static int bid, lid;
+	public static final int DECORATION;
+	private static LinkedHashMap<Integer, Block> blocksid;
+	private static LinkedHashMap<Integer, Level> levelsid;
+	public GameState state;
 }
