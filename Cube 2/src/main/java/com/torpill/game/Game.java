@@ -6,10 +6,13 @@ import java.util.LinkedHashMap;
 import com.torpill.game.block.Block;
 import com.torpill.game.block.Blocks;
 import com.torpill.game.component.Window;
+import com.torpill.game.discord.RichPresence;
 import com.torpill.game.entity.Entity;
 import com.torpill.game.entity.Player;
 import com.torpill.game.level.Level;
 import com.torpill.game.level.Levels;
+import com.torpill.game.util.I18n;
+import com.torpill.game.util.TextureManager;
 
 public class Game implements Runnable {
 
@@ -59,26 +62,30 @@ public class Game implements Runnable {
 
 		switch (this.state) {
 		case INIT:
-			
+
+			RichPresence.init();
+			TextureManager.init();
+			I18n.init();
+
 			Blocks.init();
 			Blocks.register();
 
 			Levels.init();
 			Levels.register();
-			
+
 			this.state = GameState.LEVELS;
-			
+
 			break;
-			
+
 		case LEVELS:
-			
+
 			this.level = Levels.level0;
 			this.level.load(this);
-			
+
 			this.state = GameState.PLAY;
-			
+
 			break;
-			
+
 		case PLAY:
 			if (this.player.isAlive()) {
 
@@ -96,11 +103,11 @@ public class Game implements Runnable {
 				this.state = GameState.DEATH;
 			}
 			break;
-			
+
 		case DEATH:
-			
+
 			this.reload();
-			
+
 			break;
 		}
 	}
@@ -199,7 +206,7 @@ public class Game implements Runnable {
 
 		this.level.reinit();
 		this.level.load(this);
-		
+
 		this.state = GameState.PLAY;
 	}
 

@@ -8,6 +8,7 @@ import com.torpill.game.block.Blocks;
 import com.torpill.game.discord.RichPresence;
 import com.torpill.game.entity.Entity;
 import com.torpill.game.entity.Player;
+import com.torpill.game.util.I18n;
 
 import club.minnced.discord.rpc.DiscordRPC;
 import club.minnced.discord.rpc.DiscordRichPresence;
@@ -28,6 +29,7 @@ public abstract class Level {
 				this.data[i][j] = Blocks.air;
 			}
 		}
+		this.name = this.getClass().getSimpleName().toLowerCase();
 	}
 
 	public void reinit() {
@@ -98,9 +100,13 @@ public abstract class Level {
 		}
 	}
 
-	public abstract String getName();
+	public String getName() {
+
+		return I18n.format("level." + this.name + ".name");
+	}
 
 	private Player player;
+	protected String name;
 	private int x, y;
 	private ArrayList<Entity> entities;
 	private final int WIDTH, HEIGHT;

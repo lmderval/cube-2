@@ -66,9 +66,4 @@ public class Level0 extends Level {
 		this.add(Blocks.stone, 219, 0, 67, 32, false);
 		this.add(Blocks.stone, 219, 46, 67, 16, false);
 	}
-
-	public String getName() {
-
-		return "Didacticiel";
-	}
 }
