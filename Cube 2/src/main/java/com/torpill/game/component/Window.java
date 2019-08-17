@@ -43,9 +43,8 @@ public class Window extends JFrame implements Runnable, ComponentListener {
 		this.height = this.getGlassPane().getHeight();
 		this.unit = this.width / this.maxunits;
 
-		this.pan = new Panel(this.game, this);
-		this.add(this.pan);
-		this.setContentPane(this.pan);
+		this.playpan = new PlayPanel(this.game, this);
+		this.add(this.playpan);
 	}
 
 	@Override
@@ -119,11 +118,11 @@ public class Window extends JFrame implements Runnable, ComponentListener {
 
 	public void setOffset(int x, int y) {
 
-		this.pan.setOffset(x, y);
+		this.playpan.setOffset(x, y);
 	}
 
 	private Toolkit tk;
-	private Panel pan;
+	private PlayPanel playpan;
 	private int width, height;
 	private final int maxunits = 100;
 	private int unit;

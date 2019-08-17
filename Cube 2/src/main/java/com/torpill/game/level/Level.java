@@ -8,6 +8,7 @@ import com.torpill.game.block.Blocks;
 import com.torpill.game.discord.RichPresence;
 import com.torpill.game.entity.Entity;
 import com.torpill.game.entity.Player;
+import com.torpill.game.level.structure.Structure;
 import com.torpill.game.util.I18n;
 
 import club.minnced.discord.rpc.DiscordRPC;
@@ -76,14 +77,14 @@ public abstract class Level {
 
 		for (int bx = x; bx < x + width; bx++) {
 
-			if (x > this.WIDTH) {
+			if (bx >= this.WIDTH) {
 
 				continue;
 			}
 
 			for (int by = y; by < y + height; by++) {
 
-				if (y > this.HEIGHT) {
+				if (by >= this.HEIGHT) {
 
 					continue;
 				}
@@ -96,6 +97,29 @@ public abstract class Level {
 
 					this.data[bx][by] = block;
 				}
+			}
+		}
+	}
+
+	public void add(Structure structure, int x, int y) {
+
+		Block data[][] = structure.getData();
+		
+		for (int bx = x, i = 0; bx < x + data.length; bx++, i++) {
+
+			if (bx >= this.WIDTH) {
+
+				continue;
+			}
+
+			for (int by = y, j = 0; by < y + data[i].length; by++, j++) {
+
+				if (by >= this.HEIGHT || data[i][j] == Blocks.air) {
+
+					continue;
+				}
+
+				this.data[bx][by] = data[i][j];
 			}
 		}
 	}

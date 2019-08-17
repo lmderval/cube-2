@@ -73,6 +73,12 @@ public class Game implements Runnable {
 			Levels.init();
 			Levels.register();
 
+			this.state = GameState.MAIN;
+
+			break;
+
+		case MAIN:
+
 			this.state = GameState.LEVELS;
 
 			break;
@@ -87,6 +93,7 @@ public class Game implements Runnable {
 			break;
 
 		case PLAY:
+
 			if (this.player.isAlive()) {
 
 				for (Entity entity : this.entities) {
@@ -212,7 +219,7 @@ public class Game implements Runnable {
 
 	public static enum GameState {
 
-		INIT, LEVELS, PLAY, DEATH
+		INIT, MAIN, LEVELS, PLAY, DEATH
 	}
 
 	private Window window;

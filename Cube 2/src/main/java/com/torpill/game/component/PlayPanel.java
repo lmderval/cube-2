@@ -15,9 +15,9 @@ import com.torpill.game.entity.Entity;
 import com.torpill.game.util.TextureManager;
 
 @SuppressWarnings("serial")
-public class Panel extends JPanel {
+public class PlayPanel extends JPanel {
 
-	public Panel(Game game, Window window) {
+	public PlayPanel(Game game, Window window) {
 
 		super();
 
@@ -35,6 +35,9 @@ public class Panel extends JPanel {
 			break;
 
 		case LEVELS:
+			break;
+
+		case MAIN:
 			break;
 
 		case PLAY:
