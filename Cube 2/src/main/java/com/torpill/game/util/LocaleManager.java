@@ -23,12 +23,15 @@ public class LocaleManager {
 
 	private Locale currentLocale;
 	private List<Locale> availableLocale = new ArrayList<Locale>();
+	private Map<Locale, String> languages = new HashMap<Locale, String>();
 	private Map<String, String> map = new HashMap<String, String>();
+	private Map<String, String> properties = new HashMap<String, String>();
 	private final Splitter splitterlang = Splitter.on('_').limit(2);
 	private final Splitter splitterdata = Splitter.on('=').limit(2);
 
 	public void init() {
 
+		this.loadProperties();
 		this.findAvailableLocale();
 
 		if (this.isAvailable(Locale.getDefault())) {
@@ -55,6 +58,38 @@ public class LocaleManager {
 			e.printStackTrace();
 		}
 
+	}
+
+	public void loadProperties() {
+
+		File file = new File(LocaleManager.class.getResource("/lang/languages.properties").getFile().replace("%20", " "));
+
+		try {
+
+			FileInputStream in = new FileInputStream(file);
+			Iterator<String> it = IOUtils.readLines(in, StandardCharsets.UTF_8).iterator();
+
+			while (it.hasNext()) {
+
+				String s2 = (String) it.next();
+
+				if (!s2.isEmpty() && s2.charAt(0) != 35) {
+
+					String[] astring = (String[]) Iterables.toArray(this.splitterdata.split(s2), String.class);
+
+					if (astring != null && astring.length == 2) {
+
+						String s3 = astring[0];
+						String s4 = astring[1];
+						this.properties.put(s3, s4);
+					}
+				}
+			}
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
 	}
 
 	public void findAvailableLocale() {
@@ -85,7 +120,9 @@ public class LocaleManager {
 
 						String language = astring[0];
 						String country = astring[1];
-						this.availableLocale.add(new Locale(language, country));
+						Locale locale = new Locale(language, country);
+						this.availableLocale.add(locale);
+						this.languages.put(locale, this.properties.get(lang.getName()));
 					}
 				}
 			}

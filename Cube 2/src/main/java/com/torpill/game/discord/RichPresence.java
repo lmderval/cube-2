@@ -1,5 +1,7 @@
 package com.torpill.game.discord;
 
+import com.torpill.game.util.I18n;
+
 import club.minnced.discord.rpc.DiscordEventHandlers;
 import club.minnced.discord.rpc.DiscordRPC;
 import club.minnced.discord.rpc.DiscordRichPresence;
@@ -16,10 +18,10 @@ public class RichPresence {
 		lib.Discord_Initialize(applicationId, handlers, true, steamId);
 		DiscordRichPresence presence = new DiscordRichPresence();
 		presence.startTimestamp = startTimestamp;
-		presence.details = "Sur le menu";
+		presence.details = I18n.format("discord.mainmenu");
 		presence.largeImageKey = "cube";
 		lib.Discord_UpdatePresence(presence);
-		
+
 		new Thread(() -> {
 
 			while (!Thread.currentThread().isInterrupted()) {
@@ -33,6 +35,6 @@ public class RichPresence {
 			}
 		}, "RPC-Callback-Handler").start();
 	}
-	
+
 	public static final long startTimestamp = System.currentTimeMillis() / 1000;
 }

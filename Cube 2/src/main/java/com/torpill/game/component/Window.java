@@ -1,18 +1,24 @@
 package com.torpill.game.component;
 
+import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 import com.torpill.game.Game;
+import com.torpill.game.component.panel.MainPanel;
+import com.torpill.game.component.panel.OptionsPanel;
+import com.torpill.game.component.panel.PlayPanel;
 import com.torpill.game.util.KeyboardManager;
 
 @SuppressWarnings("serial")
-public class Window extends JFrame implements Runnable, ComponentListener {
+public class Window extends JFrame implements Runnable, ComponentListener, WindowListener {
 
 	public Window(Game game) {
 
@@ -34,17 +40,19 @@ public class Window extends JFrame implements Runnable, ComponentListener {
 
 			e.printStackTrace();
 		}
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
+		this.setMinimumSize(new Dimension(820, 540));
 		this.addKeyListener(new KeyboardManager());
+		this.addWindowListener(this);
 		this.addComponentListener(this);
 
 		this.width = this.getGlassPane().getWidth();
 		this.height = this.getGlassPane().getHeight();
 		this.unit = this.width / this.maxunits;
 
+		this.mainpan = new MainPanel(this.game, this);
 		this.playpan = new PlayPanel(this.game, this);
-		this.add(this.playpan);
+		this.optionspan = new OptionsPanel(this.game, this);
 	}
 
 	@Override
@@ -52,7 +60,7 @@ public class Window extends JFrame implements Runnable, ComponentListener {
 
 		this.setVisible(true);
 
-		while (this.game.isAlive()) {
+		while (this.game.isAlive() && this.isVisible()) {
 
 			long now = System.nanoTime();
 			int frame = 0;
@@ -71,6 +79,8 @@ public class Window extends JFrame implements Runnable, ComponentListener {
 			this.realfps = frame;
 			System.out.println(this.realfps + " FPS");
 		}
+
+		this.setVisible(false);
 	}
 
 	@Override
@@ -93,6 +103,42 @@ public class Window extends JFrame implements Runnable, ComponentListener {
 
 	@Override
 	public void componentHidden(ComponentEvent e) {
+
+	}
+
+	@Override
+	public void windowOpened(WindowEvent e) {
+
+	}
+
+	@Override
+	public void windowClosing(WindowEvent e) {
+
+		this.game.kill();
+	}
+
+	@Override
+	public void windowClosed(WindowEvent e) {
+
+	}
+
+	@Override
+	public void windowIconified(WindowEvent e) {
+
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {
+
+	}
+
+	@Override
+	public void windowActivated(WindowEvent e) {
+
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {
 
 	}
 
@@ -121,8 +167,60 @@ public class Window extends JFrame implements Runnable, ComponentListener {
 		this.playpan.setOffset(x, y);
 	}
 
+	public void updatePanel() {
+
+		switch (this.game.state) {
+		case INIT:
+			break;
+
+		case MAIN:
+
+			this.remove(this.optionspan);
+			this.add(this.mainpan);
+			this.revalidate();
+			break;
+
+		case WORLDS:
+			break;
+
+		case LEVELS:
+
+			this.remove(this.mainpan);
+			this.revalidate();
+			this.requestFocus();
+			break;
+
+		case OPTIONS:
+
+			this.remove(this.mainpan);
+			this.add(this.optionspan);
+			this.revalidate();
+			break;
+
+		case CONTROLS:
+			break;
+
+		case LANGUAGES:
+			break;
+
+		case PLAY:
+
+			this.add(this.playpan);
+			this.revalidate();
+			break;
+
+		case DEATH:
+
+			this.remove(this.playpan);
+			this.revalidate();
+			break;
+		}
+	}
+
 	private Toolkit tk;
+	private MainPanel mainpan;
 	private PlayPanel playpan;
+	private OptionsPanel optionspan;
 	private int width, height;
 	private final int maxunits = 100;
 	private int unit;

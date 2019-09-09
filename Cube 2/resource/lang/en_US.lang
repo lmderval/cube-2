@@ -1,1 +1,12 @@
+#Discord
+discord.mainmenu=On main menu
+discord.ingame=In game
+#Levels
 level.level0.name=Tutorial
+#Buttons
+button.play.name=Play
+button.options.name=Options
+button.quit.name=Exit
+button.controls.name=Controls
+button.language.name=Language
+button.back.name=Back

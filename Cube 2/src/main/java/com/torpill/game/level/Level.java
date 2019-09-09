@@ -62,7 +62,7 @@ public abstract class Level {
 		DiscordRPC lib = DiscordRPC.INSTANCE;
 		DiscordRichPresence presence = new DiscordRichPresence();
 		presence.startTimestamp = RichPresence.startTimestamp;
-		presence.details = "En jeu";
+		presence.details = I18n.format("discord.ingame");
 		presence.state = this.getName();
 		presence.largeImageKey = "cube";
 		lib.Discord_UpdatePresence(presence);

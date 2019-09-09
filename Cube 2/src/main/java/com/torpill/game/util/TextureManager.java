@@ -8,7 +8,7 @@ import javax.imageio.ImageIO;
 
 import com.torpill.game.block.Block;
 import com.torpill.game.block.Blocks;
-import com.torpill.game.component.PlayPanel;
+import com.torpill.game.component.panel.CubePanel;
 
 public class TextureManager {
 
@@ -49,7 +49,7 @@ public class TextureManager {
 		}
 	}
 
-	public static void drawBlock(Graphics g, Block[][] data, int i, int j, PlayPanel pan) {
+	public static void drawBlock(Graphics g, Block[][] data, int i, int j, CubePanel pan) {
 
 		if (data[i][j] == Blocks.air) {
 

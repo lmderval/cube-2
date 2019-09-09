@@ -31,7 +31,6 @@ public class Game implements Runnable {
 
 		this.tps = 20;
 		this.entities = new ArrayList<Entity>();
-		this.window = new Window(this);
 	}
 
 	@Override
@@ -39,10 +38,9 @@ public class Game implements Runnable {
 
 		this.alive = true;
 
-		Thread thr = new Thread(this.window);
-		thr.start();
-
 		while (this.alive) {
+
+			this.laststate = this.state;
 
 			long nano = System.nanoTime();
 			long delay = 1000000000 / this.tps;
@@ -50,6 +48,11 @@ public class Game implements Runnable {
 			while (nano + delay > System.nanoTime());
 
 			this.tick();
+
+			if (this.state != this.laststate && this.state != GameState.INIT) {
+
+				this.window.updatePanel();
+			}
 		}
 	}
 
@@ -63,9 +66,8 @@ public class Game implements Runnable {
 		switch (this.state) {
 		case INIT:
 
-			RichPresence.init();
-			TextureManager.init();
 			I18n.init();
+			TextureManager.init();
 
 			Blocks.init();
 			Blocks.register();
@@ -73,14 +75,23 @@ public class Game implements Runnable {
 			Levels.init();
 			Levels.register();
 
+			RichPresence.init();
+
+			this.window = new Window(this);
+
+			Thread thr = new Thread(this.window);
+			thr.start();
+
 			this.state = GameState.MAIN;
 
 			break;
 
 		case MAIN:
+			break;
+
+		case WORLDS:
 
 			this.state = GameState.LEVELS;
-
 			break;
 
 		case LEVELS:
@@ -90,6 +101,15 @@ public class Game implements Runnable {
 
 			this.state = GameState.PLAY;
 
+			break;
+
+		case OPTIONS:
+			break;
+
+		case CONTROLS:
+			break;
+
+		case LANGUAGES:
 			break;
 
 		case PLAY:
@@ -129,9 +149,26 @@ public class Game implements Runnable {
 		return this.alive;
 	}
 
+	public void main() {
+
+		this.state = GameState.MAIN;
+	}
+
+	public void worlds() {
+
+		this.state = GameState.WORLDS;
+	}
+
+	public void options() {
+
+		this.state = GameState.OPTIONS;
+	}
+
 	public void kill() {
 
 		this.alive = false;
+
+		System.exit(0);
 	}
 
 	public void restart() {
@@ -219,7 +256,7 @@ public class Game implements Runnable {
 
 	public static enum GameState {
 
-		INIT, MAIN, LEVELS, PLAY, DEATH
+		INIT, MAIN, WORLDS, LEVELS, OPTIONS, CONTROLS, LANGUAGES, PLAY, DEATH
 	}
 
 	private Window window;
@@ -235,4 +272,5 @@ public class Game implements Runnable {
 	private static LinkedHashMap<Integer, Block> blocksid;
 	private static LinkedHashMap<Integer, Level> levelsid;
 	public GameState state;
+	private GameState laststate;
 }
