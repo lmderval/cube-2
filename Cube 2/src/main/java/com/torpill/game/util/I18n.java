@@ -1,6 +1,7 @@
 package com.torpill.game.util;
 
 import java.util.Locale;
+import java.util.Map;
 
 public class I18n {
 
@@ -34,5 +35,10 @@ public class I18n {
 	public static String format(String str, Object... params) {
 
 		return manager.formatMessage(str, params);
+	}
+	
+	public static Map<Locale, String> getLanguages() {
+		
+		return manager.getLanguages();
 	}
 }

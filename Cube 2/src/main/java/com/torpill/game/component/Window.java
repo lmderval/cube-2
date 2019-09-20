@@ -12,9 +12,10 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 import com.torpill.game.Game;
-import com.torpill.game.component.panel.MainPanel;
-import com.torpill.game.component.panel.OptionsPanel;
-import com.torpill.game.component.panel.PlayPanel;
+import com.torpill.game.component.panels.LanguagePanel;
+import com.torpill.game.component.panels.MainPanel;
+import com.torpill.game.component.panels.OptionsPanel;
+import com.torpill.game.component.panels.PlayPanel;
 import com.torpill.game.util.KeyboardManager;
 
 @SuppressWarnings("serial")
@@ -53,6 +54,7 @@ public class Window extends JFrame implements Runnable, ComponentListener, Windo
 		this.mainpan = new MainPanel(this.game, this);
 		this.playpan = new PlayPanel(this.game, this);
 		this.optionspan = new OptionsPanel(this.game, this);
+		this.languagespan = new LanguagePanel(this.game, this);
 	}
 
 	@Override
@@ -193,6 +195,7 @@ public class Window extends JFrame implements Runnable, ComponentListener, Windo
 		case OPTIONS:
 
 			this.remove(this.mainpan);
+			this.remove(this.languagespan);
 			this.add(this.optionspan);
 			this.revalidate();
 			break;
@@ -201,6 +204,10 @@ public class Window extends JFrame implements Runnable, ComponentListener, Windo
 			break;
 
 		case LANGUAGES:
+			
+			this.remove(this.optionspan);
+			this.add(this.languagespan);
+			this.revalidate();
 			break;
 
 		case PLAY:
@@ -221,6 +228,7 @@ public class Window extends JFrame implements Runnable, ComponentListener, Windo
 	private MainPanel mainpan;
 	private PlayPanel playpan;
 	private OptionsPanel optionspan;
+	private LanguagePanel languagespan;
 	private int width, height;
 	private final int maxunits = 100;
 	private int unit;

@@ -14,6 +14,9 @@ import com.torpill.game.level.Levels;
 import com.torpill.game.util.I18n;
 import com.torpill.game.util.TextureManager;
 
+import club.minnced.discord.rpc.DiscordRPC;
+import club.minnced.discord.rpc.DiscordRichPresence;
+
 public class Game implements Runnable {
 
 	static {
@@ -164,6 +167,11 @@ public class Game implements Runnable {
 		this.state = GameState.OPTIONS;
 	}
 
+	public void languages() {
+
+		this.state = GameState.LANGUAGES;
+	}
+
 	public void kill() {
 
 		this.alive = false;
@@ -252,6 +260,16 @@ public class Game implements Runnable {
 		this.level.load(this);
 
 		this.state = GameState.PLAY;
+	}
+
+	public void discord() {
+
+		DiscordRPC lib = DiscordRPC.INSTANCE;
+		DiscordRichPresence presence = new DiscordRichPresence();
+		presence.startTimestamp = RichPresence.startTimestamp;
+		presence.details = I18n.format("discord.mainmenu");
+		presence.largeImageKey = "cube";
+		lib.Discord_UpdatePresence(presence);
 	}
 
 	public static enum GameState {

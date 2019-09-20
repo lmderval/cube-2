@@ -8,7 +8,7 @@ import javax.imageio.ImageIO;
 
 import com.torpill.game.block.Block;
 import com.torpill.game.block.Blocks;
-import com.torpill.game.component.panel.CubePanel;
+import com.torpill.game.component.panels.CubePanel;
 
 public class TextureManager {
 

@@ -1,4 +1,4 @@
-package com.torpill.game.component.panel;
+package com.torpill.game.component.panels;
 
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
@@ -80,49 +80,6 @@ public class MainPanel extends CubePanel {
 				this.add(new TransparentPanel(), gbc);
 			}
 		}
-
-// gbc.gridx = 0;
-// gbc.gridy = 0;
-// gbc.gridwidth = 1;
-// gbc.gridheight = 7;
-// gbc.weightx = 30;
-// gbc.weighty = 100;
-// gbc.fill = GridBagConstraints.BOTH;
-// this.add(new TransparentPanel(), gbc);
-// gbc.gridx = 1;
-// gbc.gridy = 0;
-// gbc.gridwidth = 1;
-// gbc.gridheight = 1;
-// gbc.weightx = 40;
-// gbc.weighty = 69;
-// this.add(new TransparentPanel(), gbc);
-// gbc.gridy = 1;
-// gbc.weighty = 5;
-// this.add(this.play, gbc);
-// gbc.gridy = 2;
-// gbc.weighty = 1;
-// this.add(new TransparentPanel(), gbc);
-// gbc.gridy = 3;
-// gbc.weighty = 5;
-// this.add(this.options, gbc);
-// gbc.gridy = 4;
-// gbc.weighty = 1;
-// this.add(new TransparentPanel(), gbc);
-// gbc.gridy = 5;
-// gbc.weighty = 5;
-// this.add(this.quit, gbc);
-// gbc.gridy = 6;
-// gbc.gridwidth = 1;
-// gbc.gridheight = 1;
-// gbc.weighty = 14;
-// this.add(new TransparentPanel(), gbc);
-// gbc.gridx = 2;
-// gbc.gridy = 0;
-// gbc.gridwidth = 1;
-// gbc.gridheight = 7;
-// gbc.weightx = 30;
-// gbc.weighty = 100;
-// this.add(new TransparentPanel(), gbc);
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package com.torpill.game.component.panel;
+package com.torpill.game.component.panels;
 
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;

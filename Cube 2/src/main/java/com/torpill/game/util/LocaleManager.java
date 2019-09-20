@@ -57,7 +57,6 @@ public class LocaleManager {
 
 			e.printStackTrace();
 		}
-
 	}
 
 	public void loadProperties() {
@@ -222,5 +221,10 @@ public class LocaleManager {
 
 			return "Format error: " + s1;
 		}
+	}
+	
+	public Map<Locale, String> getLanguages() {
+		
+		return this.languages;
 	}
 }

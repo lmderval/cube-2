@@ -1,4 +1,4 @@
-package com.torpill.game.component.panel;
+package com.torpill.game.component.panels;
 
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
@@ -89,7 +89,7 @@ public class OptionsPanel extends CubePanel {
 	}
 
 	@Override
-	protected void paintMain(Graphics g) {
+	protected void paintOptions(Graphics g) {
 
 		super.paintMain(g);
 	}
@@ -109,6 +109,8 @@ public class OptionsPanel extends CubePanel {
 			break;
 
 		case "language":
+			
+			this.game.languages();
 			break;
 		}
 	}
