@@ -1,7 +1,6 @@
 package com.torpill.game.component.panels;
 
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Image;
 import java.util.ArrayList;
 
@@ -30,9 +29,6 @@ public class PlayPanel extends CubePanel {
 	protected void paintPlay(Graphics g) {
 
 		super.paintPlay(g);
-		Graphics2D g2d = (Graphics2D) g;
-
-		g2d.translate(-this.xoffset, -this.yoffset);
 
 		int x, y, width, height, unit = this.window.getUnit();
 
@@ -44,8 +40,8 @@ public class PlayPanel extends CubePanel {
 				continue;
 			}
 
-			x = entity.getXonScreen();
-			y = entity.getYonScreen();
+			x = entity.getXonScreen() - this.xoffset;
+			y = entity.getYonScreen() + this.yoffset;
 			width = entity.getWidth();
 			height = entity.getHeight();
 			Image img = entity.getImage();
@@ -74,6 +70,7 @@ public class PlayPanel extends CubePanel {
 			}
 		}
 
-		g2d.translate(this.xoffset, this.yoffset);
+		TextureManager.drawHealth(g, this.game.getPlayer(), 3, 6, this);
+		TextureManager.drawAbsorption(g, this.game.getPlayer(), 3, 3, this);
 	}
 }

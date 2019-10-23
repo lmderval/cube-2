@@ -77,6 +77,16 @@ public class Block {
 	public void onTop(Entity entity, int x, int y, Game game) {
 
 	}
+	
+	public boolean isDamager() {
+		
+		return false;
+	}
+	
+	public int getFallDamage() {
+		
+		return 1;
+	}
 
 	protected Game game;
 	protected Level level;

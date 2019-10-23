@@ -9,6 +9,8 @@ import com.torpill.game.component.Window;
 import com.torpill.game.discord.RichPresence;
 import com.torpill.game.entity.Entity;
 import com.torpill.game.entity.Player;
+import com.torpill.game.event.CubeEvent;
+import com.torpill.game.event.Result;
 import com.torpill.game.level.Level;
 import com.torpill.game.level.Levels;
 import com.torpill.game.util.I18n;
@@ -34,6 +36,7 @@ public class Game implements Runnable {
 
 		this.tps = 20;
 		this.entities = new ArrayList<Entity>();
+		this.events = new ArrayList<CubeEvent>();
 	}
 
 	@Override
@@ -51,6 +54,7 @@ public class Game implements Runnable {
 			while (nano + delay > System.nanoTime());
 
 			this.tick();
+			this.events();
 
 			if (this.state != this.laststate && this.state != GameState.INIT) {
 
@@ -140,6 +144,36 @@ public class Game implements Runnable {
 
 			break;
 		}
+	}
+	
+	private void events() {
+		
+		for (CubeEvent evt : this.events) {
+			
+			if (!evt.isCanceled()) {
+				
+				evt.execute();
+			}
+			
+			Result result = evt.getResult();
+			switch (result) {
+			case CANCELED:
+				break;
+				
+			case DEFAULT:
+				break;
+				
+			case ERROR:
+				break;
+			}
+		}
+		
+		this.events.clear();
+	}
+	
+	public void addEvent(CubeEvent evt) {
+		
+		this.events.add(evt);
 	}
 
 	public long getTick() {
@@ -291,4 +325,5 @@ public class Game implements Runnable {
 	private static LinkedHashMap<Integer, Level> levelsid;
 	public GameState state;
 	private GameState laststate;
+	private ArrayList<CubeEvent> events;
 }

@@ -15,4 +15,10 @@ public class SlimeBlock extends Block {
 
 		entity.motionY = 2;
 	}
+	
+	@Override
+	public int getFallDamage() {
+		
+		return 0;
+	}
 }

@@ -162,8 +162,6 @@ public class LanguagePanel extends CubePanel {
 	}
 
 	private CubeButton finish;
-// private JScrollPane jsp;
-// private JPanel languages;
 	private JComboBox<String> box;
 	private Map<String, Locale> locales;
 }

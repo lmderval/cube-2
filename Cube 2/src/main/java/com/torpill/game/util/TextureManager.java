@@ -9,12 +9,14 @@ import javax.imageio.ImageIO;
 import com.torpill.game.block.Block;
 import com.torpill.game.block.Blocks;
 import com.torpill.game.component.panels.CubePanel;
+import com.torpill.game.entity.Entity;
 
 public class TextureManager {
 
 	public static void init() {
 
 		CUBE = get("/textures/entity/player/cube.png");
+		HEALTH = get("/textures/ui/health.png");
 	}
 
 	public static Image get(String file) {
@@ -148,5 +150,31 @@ public class TextureManager {
 		}
 	}
 
+	public static void drawHealth(Graphics g, Entity entity, int i, int j, CubePanel pan) {
+
+		int x = pan.getUIXonScreen(i);
+		int y = pan.getUIYonScreen(j);
+		int unit = pan.getUnit();
+
+		g.drawImage(HEALTH, x, y, x + 16 * unit, y + 2 * unit, 0, 32, 128, 48, pan);
+		g.drawImage(HEALTH, x, y, x + entity.getHealth() * (16 * unit) / entity.getStartHealth(), y + 2 * unit, 0, 0, entity.getHealth() * 128 / entity.getStartHealth(), 16, pan);
+	}
+
+	public static void drawAbsorption(Graphics g, Entity entity, int i, int j, CubePanel pan) {
+		
+		if (entity.getAbsorption() <= 0) {
+			
+			return;
+		}
+
+		int x = pan.getUIXonScreen(i);
+		int y = pan.getUIYonScreen(j);
+		int unit = pan.getUnit();
+
+		g.drawImage(HEALTH, x, y, x + 16 * unit, y + 2 * unit, 0, 32, 128, 48, pan);
+		g.drawImage(HEALTH, x, y, x + entity.getAbsorption() * (16 * unit) / entity.getStartHealth(), y + 2 * unit, 0, 16, entity.getAbsorption() * 128 / entity.getStartHealth(), 32, pan);
+	}
+
 	public static Image CUBE;
+	public static Image HEALTH;
 }

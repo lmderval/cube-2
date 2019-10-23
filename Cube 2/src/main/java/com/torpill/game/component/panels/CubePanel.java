@@ -84,12 +84,22 @@ public abstract class CubePanel extends JPanel implements ActionListener {
 
 	public int getXonScreen(int x) {
 
-		return x * this.game.getWindow().getUnit();
+		return x * this.game.getWindow().getUnit() - this.xoffset;
 	}
 
 	public int getYonScreen(int y) {
 
-		return this.game.getWindow().getGlassPaneHeigth() - y * this.game.getWindow().getUnit() - this.game.getWindow().getUnit();
+		return this.game.getWindow().getGlassPaneHeigth() - y * this.game.getWindow().getUnit() - this.game.getWindow().getUnit() + this.yoffset;
+	}
+
+	public int getUIXonScreen(int x) {
+
+		return x * this.game.getWindow().getUnit();
+	}
+
+	public int getUIYonScreen(int y) {
+
+		return y * this.game.getWindow().getUnit();
 	}
 
 	public int getUnit() {

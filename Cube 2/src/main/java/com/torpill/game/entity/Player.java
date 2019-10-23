@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 
+import com.torpill.game.util.I18n;
 import com.torpill.game.util.KeyboardManager;
 import com.torpill.game.util.TextureManager;
 
@@ -37,6 +38,12 @@ public class Player extends Entity {
 
 	public int generateXOffset() {
 
-		return (this.x < 30 ? 0 : x - 30);
+		return (this.posX < 30 ? 0 : posX - 30);
+	}
+	
+	@Override
+	public String getName() {
+	
+		return (this.nametag.equals("") ? I18n.format("entity.player.name") : this.nametag);
 	}
 }
