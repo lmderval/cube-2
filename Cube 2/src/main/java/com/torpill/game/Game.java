@@ -145,34 +145,37 @@ public class Game implements Runnable {
 			break;
 		}
 	}
-	
+
 	private void events() {
-		
+
 		for (CubeEvent evt : this.events) {
-			
+
 			if (!evt.isCanceled()) {
-				
+
 				evt.execute();
 			}
-			
+
 			Result result = evt.getResult();
 			switch (result) {
-			case CANCELED:
-				break;
-				
 			case DEFAULT:
 				break;
-				
+
+			case SUCCESS:
+				break;
+
+			case CANCELED:
+				break;
+
 			case ERROR:
 				break;
 			}
 		}
-		
+
 		this.events.clear();
 	}
-	
+
 	public void addEvent(CubeEvent evt) {
-		
+
 		this.events.add(evt);
 	}
 

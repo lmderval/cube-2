@@ -318,6 +318,20 @@ public abstract class Entity implements IDamager {
 		return this.health - this.startHealth;
 	}
 
+	public void regen(int health) {
+
+		this.health += health;
+		if (this.health > this.startHealth) {
+
+			this.health = this.startHealth;
+		}
+	}
+
+	public void absorb(int health) {
+
+		this.health = this.startHealth + health;
+	}
+
 	protected Game game;
 	protected Level level;
 	protected int posX, posY, width = 1, height = 1;

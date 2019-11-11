@@ -4,6 +4,7 @@ import com.torpill.game.Game;
 import com.torpill.game.block.Block;
 import com.torpill.game.entity.Entity;
 import com.torpill.game.event.CubeEvent;
+import com.torpill.game.event.Result;
 import com.torpill.game.util.damage.DamageSource;
 import com.torpill.game.util.damage.FallingState;
 
@@ -26,6 +27,7 @@ public abstract class EntityEvent extends CubeEvent {
 		@Override
 		public void execute() {
 
+			this.result = Result.SUCCESS;
 		}
 	}
 
@@ -43,6 +45,8 @@ public abstract class EntityEvent extends CubeEvent {
 
 			DamageSource source = new DamageSource(new FallingState(this.block));
 			this.entity.attackEntityFrom(source);
+			
+			this.result = Result.SUCCESS;
 		}
 
 		protected Block block;
@@ -61,6 +65,8 @@ public abstract class EntityEvent extends CubeEvent {
 		public void execute() {
 
 			this.entity.attackEntityFrom(this.source);
+
+			this.result = Result.SUCCESS;
 		}
 		
 		protected DamageSource source;
