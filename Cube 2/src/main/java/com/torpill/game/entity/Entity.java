@@ -12,6 +12,8 @@ import com.torpill.game.event.entity.EntityEvent.EntityDamagingEvent;
 import com.torpill.game.event.entity.EntityEvent.EntityFallingEvent;
 import com.torpill.game.event.entity.EntityEvent.EntityLivingEvent;
 import com.torpill.game.level.Level;
+import com.torpill.game.util.MathHelper;
+import com.torpill.game.util.MovingHelper;
 import com.torpill.game.util.damage.DamageSource;
 import com.torpill.game.util.damage.DamageType;
 import com.torpill.game.util.damage.IDamager;
@@ -23,6 +25,7 @@ public abstract class Entity implements IDamager {
 		this.posX = x;
 		this.posY = y;
 		this.health = this.startHealth;
+		this.mover = new MovingHelper(this);
 	}
 
 	public void addTo(Game game) {
@@ -48,77 +51,28 @@ public abstract class Entity implements IDamager {
 		}
 
 		Block data[][] = this.game.getData();
+		Entity entities[][] = new Entity[data.length][data[0].length];
+
+		for (Entity entity : this.game.getEntities()) {
+
+			if (entity == this) continue;
+
+			for (int w = 0; w < entity.width; w++) {
+
+				for (int h = 0; h < entity.height; h++) {
+
+					entities[(int) (entity.posX + w)][(int) (entity.posY + h)] = entity;
+				}
+			}
+		}
+
 		boolean flag = false;
-		int i1;
 
 		this.game.addEvent(new EntityLivingEvent(this.game, this));
 
-		for (i1 = 0; i1 < Math.abs(this.motionX); i1++) {
-
-			int dx = this.motionX / Math.abs(this.motionX);
-
-			try {
-
-				Block bl = data[this.posX + dx][this.posY];
-				Block br = data[this.posX + this.width + dx - 1][this.posY];
-				Block tl = data[this.posX + dx][this.posY + this.height - 1];
-				Block tr = data[this.posX + this.width + dx - 1][this.posY + this.height - 1];
-
-				if ((bl.isFluid() || bl == Blocks.air || bl.isDecoration()) && (br.isFluid() || br == Blocks.air || br.isDecoration()) && (tl.isFluid() || tl == Blocks.air || tl.isDecoration()) && (tr.isFluid() || tr == Blocks.air || tr.isDecoration())) {
-
-					this.posX += dx;
-				}
-
-			} catch (ArrayIndexOutOfBoundsException e) {
-
-			}
-		}
-
-		for (i1 = 0; i1 < Math.abs(this.motionY); i1++) {
-
-			int dy = this.motionY / Math.abs(this.motionY);
-
-			try {
-
-				Block bl = data[this.posX][this.posY + dy];
-				Block br = data[this.posX + this.width - 1][this.posY + dy];
-				Block tl = data[this.posX][this.posY + this.height + dy - 1];
-				Block tr = data[this.posX + this.width - 1][this.posY + this.height + dy - 1];
-
-				if ((bl.isFluid() || bl == Blocks.air || bl.isDecoration()) && (br.isFluid() || br == Blocks.air || br.isDecoration()) && (tl.isFluid() || tl == Blocks.air || tl.isDecoration()) && (tr.isFluid() || tr == Blocks.air || tr.isDecoration())) {
-
-					this.posY += dy;
-				}
-
-				for (int i = 0; i < this.width; i++) {
-
-					Block t = data[this.posX + i][this.posY + this.height];
-					if (t != Blocks.air && !t.isFluid() && !t.isDecoration()) {
-
-						this.motionY = 0;
-					}
-				}
-
-			} catch (ArrayIndexOutOfBoundsException e) {
-
-			}
-		}
-
-		if (this.posY > 0) {
-
-			for (int i = 0; i < this.width; i++) {
-
-				Block b = data[this.posX + i][this.posY - 1];
-				if (b != Blocks.air && !b.isFluid() && !b.isDecoration()) {
-
-					flag = true;
-				}
-			}
-
-		} else {
-
-			flag = true;
-		}
+		this.mover.move(data);
+		this.posY = MathHelper.round(this.posY, 0);
+		flag = this.mover.checkGround(data);
 
 		ArrayList<DamagerBlock> dbs = new ArrayList<DamagerBlock>();
 
@@ -126,12 +80,12 @@ public abstract class Entity implements IDamager {
 
 			for (int j = -1; j < this.height + 1; j++) {
 
-				if (this.posY + j < 0 || this.posY + j >= data[this.posX + i].length) {
+				if (this.posY + j < 0 || this.posY + j >= data[(int) (this.posX + i)].length) {
 
 					continue;
 				}
 
-				Block p = data[this.posX + i][this.posY + j];
+				Block p = data[(int) (this.posX + i)][(int) (this.posY + j)];
 				if (p.isDamager()) {
 
 					DamagerBlock db = (DamagerBlock) p;
@@ -156,7 +110,7 @@ public abstract class Entity implements IDamager {
 
 					if (this.posY - 1 >= 0) {
 
-						this.game.addEvent(new EntityFallingEvent(this.game, this, data[this.posX + i][this.posY - 1]));
+						this.game.addEvent(new EntityFallingEvent(this.game, this, data[(int) (this.posX + i)][(int) (this.posY - 1)]));
 
 					} else {
 
@@ -179,11 +133,11 @@ public abstract class Entity implements IDamager {
 
 			for (int i = 0; i < this.width; i++) {
 
-				Block b = data[this.posX + i][this.posY - 1];
+				Block b = data[(int) (this.posX + i)][(int) (this.posY - 1)];
 
 				if (b != Blocks.air && !b.isDecoration()) {
 
-					b.onTop(this, this.posX + i, this.posY - 1, game);
+					b.onTop(this, (int) (this.posX + i), (int) (this.posY - 1), game);
 				}
 			}
 		}
@@ -197,12 +151,18 @@ public abstract class Entity implements IDamager {
 		}
 	}
 
-	public int getX() {
+	public void move(double dx, double dy) {
+
+		this.posX = MathHelper.round(this.posX + dx, 2);
+		this.posY = MathHelper.round(this.posY + dy, 2);
+	}
+
+	public double getX() {
 
 		return this.posX;
 	}
 
-	public int getY() {
+	public double getY() {
 
 		return this.posY;
 	}
@@ -219,12 +179,12 @@ public abstract class Entity implements IDamager {
 
 	public int getXonScreen() {
 
-		return this.posX * this.game.getWindow().getUnit();
+		return (int) (this.posX * this.game.getWindow().getUnit());
 	}
 
 	public int getYonScreen() {
 
-		return this.game.getWindow().getGlassPaneHeigth() - this.posY * this.game.getWindow().getUnit() - this.game.getWindow().getUnit() * this.height;
+		return (int) (this.game.getWindow().getGlassPaneHeigth() - this.posY * this.game.getWindow().getUnit() - this.game.getWindow().getUnit() * this.height);
 	}
 
 	public Color getColor() {
@@ -257,7 +217,7 @@ public abstract class Entity implements IDamager {
 
 		switch (source.type) {
 		case FALL:
-			m = this.lastTickPosY - this.posY - 4;
+			m = (int) (this.lastTickPosY - this.posY - 4);
 			if (m < 0) {
 
 				m = 0;
@@ -334,9 +294,10 @@ public abstract class Entity implements IDamager {
 
 	protected Game game;
 	protected Level level;
-	protected int posX, posY, width = 1, height = 1;
-	protected int lastTickPosX, lastTickPosY;
-	public int motionX, motionY;
+	protected double posX, posY;
+	protected int width = 3, height = 3;
+	protected double lastTickPosX, lastTickPosY;
+	public double motionX, motionY;
 	protected boolean onGround = true;
 	public boolean colsides[] = new boolean[4];
 	protected boolean dead;
@@ -344,4 +305,5 @@ public abstract class Entity implements IDamager {
 	protected int startHealth = 200, health;
 	protected boolean onFire; // TODO Fire
 	protected String nametag = "";
+	private MovingHelper mover;
 }

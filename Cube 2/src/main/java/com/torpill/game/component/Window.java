@@ -164,7 +164,7 @@ public class Window extends JFrame implements Runnable, ComponentListener, Windo
 		return this.height;
 	}
 
-	public void setOffset(int x, int y) {
+	public void setOffset(double x, double y) {
 
 		this.playpan.setOffset(x, y);
 	}

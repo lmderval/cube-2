@@ -8,7 +8,7 @@ import com.torpill.game.block.Blocks;
 import com.torpill.game.component.Window;
 import com.torpill.game.discord.RichPresence;
 import com.torpill.game.entity.Entity;
-import com.torpill.game.entity.Player;
+import com.torpill.game.entity.player.Player;
 import com.torpill.game.event.CubeEvent;
 import com.torpill.game.event.Result;
 import com.torpill.game.level.Level;
@@ -123,14 +123,24 @@ public class Game implements Runnable {
 
 			if (this.player.isAlive()) {
 
+				ArrayList<Entity> deeds = new ArrayList<Entity>();
 				for (Entity entity : this.entities) {
 
 					entity.update();
+					if (!entity.isAlive()) {
+
+						deeds.add(entity);
+					}
 				}
 
 				this.window.setOffset(this.player.generateXOffset(), 0);
 
 				this.tick++;
+
+				for (Entity entity : deeds) {
+
+					this.entities.remove(entity);
+				}
 
 			} else {
 

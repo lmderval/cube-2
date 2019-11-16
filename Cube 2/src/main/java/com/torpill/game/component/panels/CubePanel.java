@@ -76,10 +76,10 @@ public abstract class CubePanel extends JPanel implements ActionListener {
 
 	}
 
-	public void setOffset(int x, int y) {
+	public void setOffset(double x, double y) {
 
-		this.xoffset = x * this.window.getUnit();
-		this.yoffset = y * this.window.getUnit();
+		this.xoffset = (int) (x * this.window.getUnit());
+		this.yoffset = (int) (y * this.window.getUnit());
 	}
 
 	public int getXonScreen(int x) {

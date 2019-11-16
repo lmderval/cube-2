@@ -7,7 +7,7 @@ import com.torpill.game.block.Block;
 import com.torpill.game.block.Blocks;
 import com.torpill.game.discord.RichPresence;
 import com.torpill.game.entity.Entity;
-import com.torpill.game.entity.Player;
+import com.torpill.game.entity.player.Player;
 import com.torpill.game.level.structure.Structure;
 import com.torpill.game.util.I18n;
 

@@ -11,3 +11,6 @@ button.controls.name=Controls
 button.language.name=Language
 button.back.name=Back
 button.finish.name=Finish
+#Entities
+entity.player.name=Player
+entity.venom.name=Venom

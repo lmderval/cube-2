@@ -16,6 +16,7 @@ public class TextureManager {
 	public static void init() {
 
 		CUBE = get("/textures/entity/player/cube.png");
+		VENOM = get("/textures/entity/monsters/venom.png");
 		HEALTH = get("/textures/ui/health.png");
 	}
 
@@ -176,5 +177,6 @@ public class TextureManager {
 	}
 
 	public static Image CUBE;
+	public static Image VENOM;
 	public static Image HEALTH;
 }

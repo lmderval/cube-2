@@ -11,3 +11,6 @@ button.controls.name=Contrôles
 button.language.name=Langage
 button.back.name=Retour
 button.finish.name=Terminé
+#Entities
+entity.player.name=Joueur
+entity.venom.name=Venin

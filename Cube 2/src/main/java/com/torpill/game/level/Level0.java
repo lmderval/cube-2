@@ -1,6 +1,7 @@
 package com.torpill.game.level;
 
 import com.torpill.game.block.Blocks;
+import com.torpill.game.entity.monsters.EntityVenom;
 import com.torpill.game.level.structure.StructureBridge;
 
 public class Level0 extends Level {
@@ -37,5 +38,7 @@ public class Level0 extends Level {
 		this.add(Blocks.slime, 216, 14, 3, 1, false);
 		this.add(Blocks.stone, 219, 0, 67, 32, false);
 		this.add(Blocks.stone, 219, 46, 67, 16, false);
+		
+		this.add(new EntityVenom(28, 13));
 	}
 }
