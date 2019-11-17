@@ -7,6 +7,7 @@ import com.torpill.game.event.CubeEvent;
 import com.torpill.game.event.Result;
 import com.torpill.game.util.damage.DamageSource;
 import com.torpill.game.util.damage.FallingState;
+import com.torpill.game.util.damage.MashedUpState;
 
 public abstract class EntityEvent extends CubeEvent {
 
@@ -45,7 +46,7 @@ public abstract class EntityEvent extends CubeEvent {
 
 			DamageSource source = new DamageSource(new FallingState(this.block));
 			this.entity.attackEntityFrom(source);
-			
+
 			this.result = Result.SUCCESS;
 		}
 
@@ -57,7 +58,7 @@ public abstract class EntityEvent extends CubeEvent {
 		public EntityDamagingEvent(Game game, Entity entity, DamageSource source) {
 
 			super(game, entity);
-			
+
 			this.source = source;
 		}
 
@@ -68,8 +69,28 @@ public abstract class EntityEvent extends CubeEvent {
 
 			this.result = Result.SUCCESS;
 		}
-		
+
 		protected DamageSource source;
+	}
+
+	public static class EntityMashingUpEvent extends EntityEvent {
+
+		public EntityMashingUpEvent(Game game, Entity entity, Entity target) {
+
+			super(game, entity);
+
+			this.target = target;
+		}
+
+		@Override
+		public void execute() {
+
+			this.target.attackEntityFrom(new DamageSource(new MashedUpState()));
+
+			this.result = Result.SUCCESS;
+		}
+
+		protected Entity target;
 	}
 
 	protected Entity entity;

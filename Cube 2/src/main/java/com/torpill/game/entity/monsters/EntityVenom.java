@@ -10,7 +10,7 @@ public class EntityVenom extends EntityMonster {
 
 		super(x, y);
 
-		this.motionX = 0.2;
+		this.motionX = 0.0;
 	}
 
 	@Override

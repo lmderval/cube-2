@@ -1,5 +1,7 @@
 package com.torpill.game.util;
 
+import java.util.ArrayList;
+
 import com.torpill.game.block.Block;
 import com.torpill.game.block.Blocks;
 import com.torpill.game.entity.Entity;
@@ -10,9 +12,10 @@ public class MovingHelper {
 
 		this.INCREMENT = 0.05;
 		this.entity = entity;
+		this.mashedup = new ArrayList<Entity>();
 	}
 
-	public void move(Block[][] area) {
+	public void move(Block[][] area, Entity[][] entities) {
 
 		if (this.entity.motionX != 0) {
 
@@ -23,6 +26,8 @@ public class MovingHelper {
 
 				if (this.checkNextPos(area, dx, 0)) this.entity.move(dx, 0);
 				if (this.checkNextPos(area, 0, dy)) this.entity.move(0, dy);
+
+				this.checkCollision(entities);
 			}
 
 		} else {
@@ -34,8 +39,12 @@ public class MovingHelper {
 
 				if (this.checkNextPos(area, dx, 0)) this.entity.move(dx, 0);
 				if (this.checkNextPos(area, 0, dy)) this.entity.move(0, dy);
+
+				this.checkCollision(entities);
 			}
 		}
+
+		this.doActions();
 	}
 
 	public boolean checkNextPos(Block[][] area, double dx, double dy) {
@@ -79,6 +88,52 @@ public class MovingHelper {
 		return true;
 	}
 
+	public void checkCollision(Entity[][] entities) {
+
+		int ceilx = (int) Math.ceil(this.entity.getX() + this.entity.getWidth());
+		int floorx = (int) Math.floor(this.entity.getX());
+		int ceily = (int) Math.ceil(this.entity.getY() + this.entity.getHeight());
+		int floory = (int) Math.floor(this.entity.getY());
+
+		for (int i = floorx; i < ceilx; i++) {
+
+			for (int j = floory; j < ceily; j++) {
+
+				try {
+
+					Entity e = entities[i][j];
+
+					if (e != null) {
+
+						int ceilycol = (int) Math.ceil(e.getY() + e.getHeight());
+						if (floory == ceilycol - 1 && this.entity.motionY <= 0.0) {
+
+							if (!this.mashedup.contains(e)) {
+
+								this.mashedup.add(e);
+							}
+						}
+					}
+
+				} catch (ArrayIndexOutOfBoundsException e) {
+
+					continue;
+				}
+			}
+		}
+	}
+
+	private void doActions() {
+
+		for (Entity e : this.mashedup) {
+
+			this.entity.mashingUp(e);
+		}
+
+		this.mashedup.clear();
+	}
+
 	public final double INCREMENT;
 	private Entity entity;
+	private ArrayList<Entity> mashedup;
 }

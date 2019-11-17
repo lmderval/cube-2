@@ -11,7 +11,9 @@ import com.torpill.game.block.damager.DamagerBlock;
 import com.torpill.game.event.entity.EntityEvent.EntityDamagingEvent;
 import com.torpill.game.event.entity.EntityEvent.EntityFallingEvent;
 import com.torpill.game.event.entity.EntityEvent.EntityLivingEvent;
+import com.torpill.game.event.entity.EntityEvent.EntityMashingUpEvent;
 import com.torpill.game.level.Level;
+import com.torpill.game.util.I18n;
 import com.torpill.game.util.MathHelper;
 import com.torpill.game.util.MovingHelper;
 import com.torpill.game.util.damage.DamageSource;
@@ -70,7 +72,7 @@ public abstract class Entity implements IDamager {
 
 		this.game.addEvent(new EntityLivingEvent(this.game, this));
 
-		this.mover.move(data);
+		this.mover.move(data, entities);
 		this.posY = MathHelper.round(this.posY, 0);
 		flag = this.mover.checkGround(data);
 
@@ -232,6 +234,11 @@ public abstract class Entity implements IDamager {
 			l = 0;
 			break;
 
+		case MASH:
+			l = 0;
+			m = this.health;
+			break;
+
 		default:
 			break;
 		}
@@ -247,6 +254,11 @@ public abstract class Entity implements IDamager {
 
 			this.dead = true;
 		}
+	}
+
+	public void mashingUp(Entity target) {
+
+		this.game.addEvent(new EntityMashingUpEvent(this.game, this, target));
 	}
 
 	@Override
